@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> with WindowListener {
         child: WindowCaption(
           brightness: Theme.of(context).brightness,
           title: Text(
-              'window_manager_example',
+              'Testprogramm',
             style: TextStyle(color: Colors.grey[200]),
           ),
           backgroundColor: Colors.grey[700],
@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> with WindowListener {
           SideMenu(
             controller: page,
             style: SideMenuStyle(
-              displayMode: SideMenuDisplayMode.auto,
+              displayMode: SideMenuDisplayMode.open,
               hoverColor: Colors.blue[100],
               selectedColor: Colors.lightBlue,
               selectedTitleTextStyle: const TextStyle(color: Colors.white),
@@ -97,6 +97,7 @@ class _HomePageState extends State<HomePage> with WindowListener {
               //   borderRadius: BorderRadius.all(Radius.circular(10)),
               // ),
               // backgroundColor: Colors.blueGrey[700]
+              backgroundColor: Colors.grey[200]
             ),
             title: Column(
               children: [
@@ -119,7 +120,7 @@ class _HomePageState extends State<HomePage> with WindowListener {
             footer: const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                'mohada',
+                '© thlinde 2022',
                 style: TextStyle(fontSize: 15),
               ),
             ),
