@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 
 import 'model/store.dart';
 import 'model/ui.dart';
+import 'widgets/top_bar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -84,78 +85,131 @@ class _HomePageState extends State<HomePage> with WindowListener {
         ),
         preferredSize: const Size.fromHeight(kWindowCaptionHeight),
       ),
-      body: Row(
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              const SizedBox(
-                height: 20,
-              ),
-              Expanded(
-                  child: SizedBox(
-                    width: 250.0,
-                    child: ListView.builder(
-                      padding: const EdgeInsets.all(8),
-                      itemCount: navList.length,
-                      itemBuilder: (context, index) => Card(
-                        elevation: 0.0,
-                        color: Colors.grey[200],
-                        key: ValueKey(navList[index].index),
-                        child: ListTile(
-                          onTap: () {
-                            page.jumpToPage(navList[index].index);
-                          },
-                          title: Text(navList[index].title),
-                          leading: Icon(navList[index].icon),
-                    ),
-                  ),
-                ),
-              )
-              ),
-              Row(
+        children: <Widget>[
+          const TopBar(),
+          Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: 250,
-                    height: 145,
-                    child: ListView(
-                      padding: const EdgeInsets.all(8),
-                      children: [
-                        const Divider(),
-                        Card(
-                          elevation: 0.0,
-                          color: Colors.grey[200],
-                          child: ListTile(
-                            onTap: () {
-                              // Settings is last Page: length+1
-                              page.jumpToPage(navList.length + 1);
-                            },
-                            title: const Text("Einstellungen"),
-                            leading: const Icon(
-                                Icons.settings,
+                  // thlinde:SideBar
+                  Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Expanded(
+                      child: SizedBox(
+                        width: 250.0,
+                        child: ListView.builder(
+                          padding: const EdgeInsets.all(8),
+                          itemCount: navList.length,
+                          itemBuilder: (context, index) => Card(
+                            elevation: 0.0,
+                            color: Colors.grey[200],
+                            key: ValueKey(navList[index].index),
+                            child: ListTile(
+                              onTap: () {
+                                page.jumpToPage(navList[index].index);
+                              },
+                              title: Text(navList[index].title),
+                              leading: Icon(navList[index].icon),
                             ),
                           ),
                         ),
-                        Card(
-                          elevation: 0.0,
-                          color: Colors.red[300],
-                          child: ListTile(
-                            textColor: Colors.grey[200],
-                            onTap: () {
-                              // ScaffoldMessenger.of(context).showSnackBar(
-                              //     SnackBar(
-                              //       content: const Text('Programm exited!'),
-                              //       backgroundColor: Colors.grey[600],
-                              //     )
-                              // );
-                              windowManager.close();
-                            },
-                            title: const Text("Programm beenden"),
-                            leading: Icon(
-                                Icons.exit_to_app,
-                                color: Colors.grey[200]
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 250,
+                          height: 145,
+                          child: ListView(
+                            padding: const EdgeInsets.all(8),
+                            children: [
+                              const Divider(),
+                              Card(
+                                elevation: 0.0,
+                                color: Colors.grey[200],
+                                child: ListTile(
+                                  onTap: () {
+                                    // thlinde:Settings is last Page: length+1
+                                    page.jumpToPage(navList.length + 1);
+                                  },
+                                  title: const Text("Einstellungen"),
+                                  leading: const Icon(
+                                    Icons.settings,
+                                  ),
+                                ),
+                              ),
+                              Card(
+                                elevation: 0.0,
+                                color: Colors.red[300],
+                                child: ListTile(
+                                  textColor: Colors.grey[200],
+                                  onTap: () {
+                                    // ScaffoldMessenger.of(context).showSnackBar(
+                                    //     SnackBar(
+                                    //       content: const Text('Programm exited!'),
+                                    //       backgroundColor: Colors.grey[600],
+                                    //     )
+                                    // );
+                                    windowManager.close();
+                                  },
+                                  title: const Text("Programm beenden"),
+                                  leading: Icon(Icons.exit_to_app,
+                                      color: Colors.grey[200]),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                // thlinde:Pages
+                Expanded(
+                    // Todo here comes the pages
+                    child: PageView(
+                      controller: page,
+                      children: [
+                        Container(
+                          color: Colors.white,
+                          child: const Center(
+                            child: Text(
+                              'Item1',
+                              style: TextStyle(fontSize: 35),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          color: Colors.white,
+                          child: const Center(
+                            child: Text(
+                              'Item2',
+                              style: TextStyle(fontSize: 35),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          color: Colors.white,
+                          child: const Center(
+                            child: Text(
+                              'Item3',
+                              style: TextStyle(fontSize: 35),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          color: Colors.white,
+                          child: const Center(
+                            child: Text(
+                              'Einstellungen',
+                              style: TextStyle(fontSize: 35),
                             ),
                           ),
                         ),
@@ -164,51 +218,6 @@ class _HomePageState extends State<HomePage> with WindowListener {
                   ),
                 ],
               ),
-            ],
-          ),
-          Expanded(
-            // Todo here comes the pages
-            child: PageView(
-              controller: page,
-              children: [
-                Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Item1',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Item2',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Item3',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Einstellungen',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),
