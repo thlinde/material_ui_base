@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:easy_sidemenu/easy_sidemenu.dart';
 
 import 'model/store.dart';
+import 'model/ui.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,6 +55,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with WindowListener {
   final ProgController prog = Get.find();
   PageController page = PageController();
+  // Initialize Items for NavigatenSideBar
+  final navList = initNavList();
 
   @override
   void initState() {
@@ -85,99 +87,87 @@ class _HomePageState extends State<HomePage> with WindowListener {
       body: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SideMenu(
-            controller: page,
-            style: SideMenuStyle(
-              displayMode: SideMenuDisplayMode.open,
-              hoverColor: Colors.blue[100],
-              selectedColor: Colors.lightBlue,
-              selectedTitleTextStyle: const TextStyle(color: Colors.white),
-              selectedIconColor: Colors.white,
-              // decoration: BoxDecoration(
-              //   borderRadius: BorderRadius.all(Radius.circular(10)),
-              // ),
-              // backgroundColor: Colors.blueGrey[700]
-              backgroundColor: Colors.grey[200]
-            ),
-            title: Column(
-              children: [
-                ConstrainedBox(
-                  constraints: const BoxConstraints(
-                    maxHeight: 150,
-                    maxWidth: 150,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              const SizedBox(
+                height: 20,
+              ),
+              Expanded(
+                  child: SizedBox(
+                    width: 250.0,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: navList.length,
+                      itemBuilder: (context, index) => Card(
+                        elevation: 0.0,
+                        color: Colors.grey[200],
+                        key: ValueKey(navList[index].index),
+                        child: ListTile(
+                          onTap: () {
+                            page.jumpToPage(navList[index].index);
+                          },
+                          title: Text(navList[index].title),
+                          leading: Icon(navList[index].icon),
+                    ),
                   ),
-                  // child: Image.asset(
-                  //   'assets/images/easy_sidemenu.png',
-                  // ),
-                  child: const Text('thlinde'),
                 ),
-                const Divider(
-                  indent: 8.0,
-                  endIndent: 8.0,
-                ),
-              ],
-            ),
-            footer: const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                '© thlinde 2022',
-                style: TextStyle(fontSize: 15),
+              )
               ),
-            ),
-            items: [
-              SideMenuItem(
-                priority: 0,
-                title: 'Dashboard',
-                onTap: () {
-                  page.jumpToPage(0);
-                },
-                icon: const Icon(Icons.home),
-                badgeContent: const Text(
-                  '3',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              SideMenuItem(
-                priority: 1,
-                title: 'Users',
-                onTap: () {
-                  page.jumpToPage(1);
-                },
-                icon: const Icon(Icons.supervisor_account),
-              ),
-              SideMenuItem(
-                priority: 2,
-                title: 'Files',
-                onTap: () {
-                  page.jumpToPage(2);
-                },
-                icon: const Icon(Icons.file_copy_rounded),
-              ),
-              SideMenuItem(
-                priority: 3,
-                title: 'Download',
-                onTap: () {
-                  page.jumpToPage(3);
-                },
-                icon: const Icon(Icons.download),
-              ),
-              SideMenuItem(
-                priority: 4,
-                title: 'Settings',
-                onTap: () {
-                  page.jumpToPage(4);
-                },
-                icon: const Icon(Icons.settings),
-              ),
-              SideMenuItem(
-                priority: 6,
-                title: 'Exit',
-                onTap: () async {},
-                icon: const Icon(Icons.exit_to_app),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 250,
+                    height: 145,
+                    child: ListView(
+                      padding: const EdgeInsets.all(8),
+                      children: [
+                        const Divider(),
+                        Card(
+                          elevation: 0.0,
+                          color: Colors.grey[200],
+                          child: ListTile(
+                            onTap: () {
+                              // Settings is last Page: length+1
+                              page.jumpToPage(navList.length + 1);
+                            },
+                            title: const Text("Einstellungen"),
+                            leading: const Icon(
+                                Icons.settings,
+                            ),
+                          ),
+                        ),
+                        Card(
+                          elevation: 0.0,
+                          color: Colors.red[300],
+                          child: ListTile(
+                            textColor: Colors.grey[200],
+                            onTap: () {
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //     SnackBar(
+                              //       content: const Text('Programm exited!'),
+                              //       backgroundColor: Colors.grey[600],
+                              //     )
+                              // );
+                              windowManager.close();
+                            },
+                            title: const Text("Programm beenden"),
+                            leading: Icon(
+                                Icons.exit_to_app,
+                                color: Colors.grey[200]
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
           Expanded(
+            // Todo here comes the pages
             child: PageView(
               controller: page,
               children: [
@@ -185,7 +175,7 @@ class _HomePageState extends State<HomePage> with WindowListener {
                   color: Colors.white,
                   child: const Center(
                     child: Text(
-                      'Dashboard',
+                      'Item1',
                       style: TextStyle(fontSize: 35),
                     ),
                   ),
@@ -194,7 +184,7 @@ class _HomePageState extends State<HomePage> with WindowListener {
                   color: Colors.white,
                   child: const Center(
                     child: Text(
-                      'Users',
+                      'Item2',
                       style: TextStyle(fontSize: 35),
                     ),
                   ),
@@ -203,7 +193,7 @@ class _HomePageState extends State<HomePage> with WindowListener {
                   color: Colors.white,
                   child: const Center(
                     child: Text(
-                      'Files',
+                      'Item3',
                       style: TextStyle(fontSize: 35),
                     ),
                   ),
@@ -212,16 +202,7 @@ class _HomePageState extends State<HomePage> with WindowListener {
                   color: Colors.white,
                   child: const Center(
                     child: Text(
-                      'Download',
-                      style: TextStyle(fontSize: 35),
-                    ),
-                  ),
-                ),
-                Container(
-                  color: Colors.white,
-                  child: const Center(
-                    child: Text(
-                      'Settings',
+                      'Einstellungen',
                       style: TextStyle(fontSize: 35),
                     ),
                   ),
