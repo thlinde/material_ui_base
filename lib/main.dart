@@ -6,16 +6,20 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'model/store.dart';
-import 'model/ui.dart';
+import 'model/utility.dart';
 import 'widgets/top_bar.dart';
+import 'pages/settings.dart';
+import 'pages/page01.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
   await GetStorage.init();
   final ProgController prog = Get.put(ProgController());
+  final StoreController store = Get.put(StoreController());
 
   windowManager.waitUntilReadyToShow().then((_) async{
+    store.setTodayStr(todayDate());
     await windowManager.setTitleBarStyle(TitleBarStyle.hidden);
     await windowManager.setSize(Size(prog.width, prog.height));
     await windowManager.setPosition(Offset(prog.xPos, prog.yPos));
@@ -77,18 +81,22 @@ class _HomePageState extends State<HomePage> with WindowListener {
       appBar: PreferredSize(
         child: WindowCaption(
           brightness: Theme.of(context).brightness,
-          title: Text(
-              'Testprogramm',
-            style: TextStyle(color: Colors.grey[200]),
+          title: const Text(
+            // todo thlinde: change window title
+            'Testprogramm',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 15,
+            ),
           ),
-          backgroundColor: Colors.grey[700],
+          backgroundColor: Colors.grey[500],
         ),
         preferredSize: const Size.fromHeight(kWindowCaptionHeight),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          const TopBar(),
+          TopBar(),
           Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -112,7 +120,10 @@ class _HomePageState extends State<HomePage> with WindowListener {
                               onTap: () {
                                 page.jumpToPage(navList[index].index);
                               },
-                              title: Text(navList[index].title),
+                              title: Text(
+                                navList[index].title,
+                                style: const TextStyle(fontSize: 14),
+                              ),
                               leading: Icon(navList[index].icon),
                             ),
                           ),
@@ -136,7 +147,10 @@ class _HomePageState extends State<HomePage> with WindowListener {
                                     // thlinde:Settings is last Page: length+1
                                     page.jumpToPage(navList.length + 1);
                                   },
-                                  title: const Text("Einstellungen"),
+                                  title: const Text(
+                                    "Einstellungen",
+                                    style: TextStyle(fontSize: 14),
+                                  ),
                                   leading: const Icon(
                                     Icons.settings,
                                   ),
@@ -150,7 +164,13 @@ class _HomePageState extends State<HomePage> with WindowListener {
                                   onTap: () {
                                     windowManager.close();
                                   },
-                                  title: const Text("Programm beenden"),
+                                  title: const Text(
+                                    "Programm beenden",
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600
+                                    ),
+                                  ),
                                   leading: Icon(Icons.exit_to_app,
                                       color: Colors.grey[100]),
                                 ),
@@ -167,43 +187,11 @@ class _HomePageState extends State<HomePage> with WindowListener {
                     // Todo here comes the pages
                     child: PageView(
                       controller: page,
-                      children: [
-                        Container(
-                          color: Colors.white,
-                          child: const Center(
-                            child: Text(
-                              'Item1',
-                              style: TextStyle(fontSize: 35),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          child: const Center(
-                            child: Text(
-                              'Item2',
-                              style: TextStyle(fontSize: 35),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          child: const Center(
-                            child: Text(
-                              'Item3',
-                              style: TextStyle(fontSize: 35),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          color: Colors.white,
-                          child: const Center(
-                            child: Text(
-                              'Einstellungen',
-                              style: TextStyle(fontSize: 35),
-                            ),
-                          ),
-                        ),
+                      children: const [
+                        GeneralPage(title: 'Testseite 1'),
+                        GeneralPage(title: 'Testseite 2'),
+                        GeneralPage(title: 'Testseite 3'),
+                        SettingsPage(title: 'Einstellungen'),
                       ],
                     ),
                   ),

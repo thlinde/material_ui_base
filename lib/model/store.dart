@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class StoreController extends GetxController {
-  var index = 0.obs;
-  updateIndex(int i) => index.value = i;
+  var todayStr = ''.obs;
+  setTodayStr(String str) => todayStr.value = str;
 }
 
 class ProgController extends GetxController {
