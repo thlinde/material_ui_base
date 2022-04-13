@@ -98,9 +98,6 @@ class _HomePageState extends State<HomePage> with WindowListener {
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.max,
                   children: <Widget>[
-                    const SizedBox(
-                      height: 20,
-                    ),
                     Expanded(
                       child: SizedBox(
                         width: 250.0,
@@ -149,19 +146,13 @@ class _HomePageState extends State<HomePage> with WindowListener {
                                 elevation: 0.0,
                                 color: Colors.red[300],
                                 child: ListTile(
-                                  textColor: Colors.grey[200],
+                                  textColor: Colors.grey[100],
                                   onTap: () {
-                                    // ScaffoldMessenger.of(context).showSnackBar(
-                                    //     SnackBar(
-                                    //       content: const Text('Programm exited!'),
-                                    //       backgroundColor: Colors.grey[600],
-                                    //     )
-                                    // );
                                     windowManager.close();
                                   },
                                   title: const Text("Programm beenden"),
                                   leading: Icon(Icons.exit_to_app,
-                                      color: Colors.grey[200]),
+                                      color: Colors.grey[100]),
                                 ),
                               ),
                             ],
@@ -228,8 +219,25 @@ class _HomePageState extends State<HomePage> with WindowListener {
   void onWindowClose() async {
     bool _isPreventClose = await windowManager.isPreventClose();
     if (_isPreventClose) {
-      await saveProgSettings();
-      windowManager.destroy();
+      Get.defaultDialog(
+        title: 'Beendigung des Programms',
+        titleStyle: const TextStyle(fontWeight: FontWeight.w700),
+        middleText: 'Soll das Programm wirklich beendet werden?',
+        middleTextStyle: const TextStyle(fontWeight: FontWeight.w400),
+        textCancel: 'Nein',
+        textConfirm: 'Ja',
+        cancelTextColor: Colors.grey[800],
+        confirmTextColor: Colors.grey[100],
+        buttonColor: Colors.red[300],
+        backgroundColor: Colors.grey[300],
+        radius: 4,
+        onConfirm: () async {
+          await saveProgSettings();
+          windowManager.destroy();
+          // thlinde:closes Dialog, here not neccessary because of destroying
+          // Get.back();
+        },
+      );
     }
   }
 
