@@ -8,6 +8,13 @@ class StoreController extends GetxController {
   setTodayStr(String str) => todayStr.value = str;
 }
 
+class StoreBinding extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut<StoreController>(() => StoreController());
+  }
+}
+
 class ProgController extends GetxController {
   final storage = GetStorage();
   double get xPos => storage.read('xPos') ?? 50.0;
